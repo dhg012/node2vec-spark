@@ -18,10 +18,10 @@ object Main {
   case class Params(iter: Int = 1,
                     lr: Double = 0.025,
                     numPartition: Int = 1,
-                    dim: Int = 3,
+                    dim: Int = 10,
                     window: Int = 10,
-                    walkLength: Int = 5,
-                    numWalks: Int = 5,
+                    walkLength: Int = 10,
+                    numWalks: Int = 10,
                     p: Double = 1.0,
                     q: Double = 1.0,
                     weighted: Boolean = true,
@@ -37,29 +37,42 @@ object Main {
   val parser = new OptionParser[Params]("Node2Vec_Spark") {
     head("Main")
     opt[Int]("walkLength")
-            .text(s"walkLength: ${defaultParams.walkLength}")
-            .action((x, c) => c.copy(walkLength = x))
+      .text(s"walkLength: ${defaultParams.walkLength}")
+      .action((x, c) => c.copy(walkLength = x))
     opt[Int]("numWalks")
-            .text(s"numWalks: ${defaultParams.numWalks}")
-            .action((x, c) => c.copy(numWalks = x))
+      .text(s"numWalks: ${defaultParams.numWalks}")
+      .action((x, c) => c.copy(numWalks = x))
     opt[Double]("p")
-            .text(s"return parameter p: ${defaultParams.p}")
-            .action((x, c) => c.copy(p = x))
+      .text(s"return parameter p: ${defaultParams.p}")
+      .action((x, c) => c.copy(p = x))
     opt[Double]("q")
-            .text(s"in-out parameter q: ${defaultParams.q}")
-            .action((x, c) => c.copy(q = x))
+      .text(s"in-out parameter q: ${defaultParams.q}")
+      .action((x, c) => c.copy(q = x))
     opt[Boolean]("weighted")
-            .text(s"weighted: ${defaultParams.weighted}")
-            .action((x, c) => c.copy(weighted = x))
+      .text(s"weighted: ${defaultParams.weighted}")
+      .action((x, c) => c.copy(weighted = x))
     opt[Boolean]("directed")
-            .text(s"directed: ${defaultParams.directed}")
-            .action((x, c) => c.copy(directed = x))
+      .text(s"directed: ${defaultParams.directed}")
+      .action((x, c) => c.copy(directed = x))
     opt[Int]("degree")
-            .text(s"degree: ${defaultParams.degree}")
-            .action((x, c) => c.copy(degree = x))
+      .text(s"degree: ${defaultParams.degree}")
+      .action((x, c) => c.copy(degree = x))
     opt[Boolean]("indexed")
-            .text(s"Whether nodes are indexed or not: ${defaultParams.indexed}")
-            .action((x, c) => c.copy(indexed = x))
+      .text(s"Whether nodes are indexed or not: ${defaultParams.indexed}")
+      .action((x, c) => c.copy(indexed = x))
+    opt[Int]("iter")
+      .text(s"number of iterations to take: ${defaultParams.iter}")
+      .action { (x, c) => c.copy(iter = x)
+      }
+
+    opt[Int]("dim")
+      .text(s"dimension to emd: ${defaultParams.dim}")
+      .action { (x, c) => c.copy(dim = x) }
+
+    opt[Int]("numPartition")
+        .text(s"num of partitions: ${defaultParams.numPartition}")
+        .action((x,c)=>c.copy(numPartition = x))
+
     opt[String]("nodePath")
             .text("Input node2index file path: empty")
             .action((x, c) => c.copy(nodePath = x))
