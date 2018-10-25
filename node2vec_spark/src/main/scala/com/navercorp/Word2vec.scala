@@ -50,7 +50,7 @@ object Word2vec extends Serializable {
   def save(): this.type = {
     model.save(context, s"${config.output}.${Property.modelSuffix}")
     context.parallelize(model.getVectors.toList).map { case (nodeId, vector) =>
-              s"$nodeId\t${vector.mkString(",")}"
+              s"$nodeId"+" "+s"${vector.mkString(" ")}"
             }.saveAsTextFile(s"${config.output}.${Property.vectorSuffix}")
   
     this
