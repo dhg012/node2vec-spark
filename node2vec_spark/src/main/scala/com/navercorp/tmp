@@ -1,0 +1,11 @@
+spark-submit --class com.navercorp.Main \
+./target/node2vec-0.0.2-SNAPSHOT.jar \
+--cmd randomwalk \
+--input ./graph/karate_edgelist.txt --output ./result/karate \
+--weighted false --walkLength 10 --numWalks 10 --p 1.0 --q 1.0 --indexed true
+
+
+spark-submit --class com.navercorp.Main \
+                  ./target/node2vec-0.0.2-SNAPSHOT.jar \
+                  --input ./result/karate.path --output ./result/karate \
+                  --cmd embedding --dim 5 --iter 1

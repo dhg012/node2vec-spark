@@ -1,3 +1,5 @@
+以下为修改过的版本。
+
 # node2vec on spark
 
 This library is a implementation using scala for running on spark of *node2vec* as described in the paper:
@@ -13,7 +15,6 @@ The *node2vec* algorithm learns continuous representations for nodes in any (un)
 **In order to build node2vec_spark, use the following:**
 
 ```
-$ git clone https://github.com/HnYeom/node2vec.git
 $ mvn clean package
 ```
 
@@ -31,38 +32,12 @@ These were described in these papers [node2vec: Scalable Feature Learning for Ne
 ### Random walk
 Example:
 	
-	./spark-submit --class com.navercorp.Main \ 
-				   ./node2vec_spark/target/node2vec-0.0.1-SNAPSHOT.jar \
-				   --cmd randomwalk --p 100.0 --q 100.0 --walkLength 40 \
-				   --input <input> --output <output>
+    spark-submit --class com.navercorp.Main \
+    ./target/node2vec-0.0.2-SNAPSHOT.jar \
+    --cmd randomwalk \
+    --input ./graph/karate_edgelist.txt --output ./result/karate \
+    --weighted true --walkLength 10 --numWalks 10 --p 1.0 --q 1.0 --indexed true
 
-#### Options
-Invoke a command without arguments to list available arguments and their default values:
-
-```
---cmd COMMAND
-	Functions: randomwalk or embedding. If you want to execute all functions "randomwalk" and "embedding" sequentially input "node2vec". Default "node2vec"
---input [INPUT]
-	Input edgelist path. The supported input format is an edgelist: "node1_id_int node2_id_int <weight_float, optional>"
---output [OUTPUT]
-	Random paths path.
---walkLength WALK_LENGTH
-	Length of walk per source. Default is 80.
---numWalks NUM_WALKS
-	Number of walks per source. Default is 10.
---p P
-	Return hyperparaemter. Default is 1.0.
---q Q
-	Inout hyperparameter. Default is 1.0.
---weighted Boolean
-	Specifying (un)weighted. Default is true.
---directed Boolean
-	Specifying (un)directed. Default is false.
---degree UPPER_BOUND_OF_NUMBER_OF_NEIGHBORS
-	Specifying upper bound of number of neighbors. Default is 30.
---indexed Boolean
-	Specifying whether nodes in edgelist are indexed or not. Default is true.
-```
 
 * If "indexed" is set to false, *node2vec_spark* index nodes in input edgelist, example: <br/>
   **unindexed edgelist:**<br/>
@@ -94,29 +69,11 @@ The output file (number of nodes)*numWalks random paths as follows:
 ### Embedding random paths
 Example:
 	
-	./spark-submit --class com.navercorp.Main \
-				   ./node2vec_spark/target/node2vec-0.0.1-SNAPSHOT.jar \
-				   --cmd embedding --dim 50 --iter 20 \
-				   --input <input> --output <output>
+    spark-submit --class com.navercorp.Main \
+                      ./target/node2vec-0.0.2-SNAPSHOT.jar \
+                      --input ./result/karate.path --output ./result/karate \
+                      --cmd embedding --dim 5 --iter 1
 
-#### Options
-Invoke a command without arguments to list available arguments and their default values:
-
-```
---cmd COMMAND
-	embedding. If you want to execute sequentially all functions: "randomwalk" and "embedding", input "node2vec". default "node2vec"
---input [INPUT]
-	Input random paths. The supported input format is an random paths: "src_node_id_int node1_id_int ... noden_id_int"
---output [OUTPUT]
-	word2vec model(.bin) and embeddings(.emb).
---iter ITERATION
-	Number of epochs in SGD. Default 10.
---dim DIMENSION
-	Number of dimensions. Default is 128.
---window WINDOW_SIZE
-	Context size for optimization. Default is 10.
-
-```
 
 #### Input
 The supported input format is an random paths:
